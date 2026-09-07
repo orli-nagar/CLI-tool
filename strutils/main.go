@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/spf13/cobra"
 )
 
 func countWords(s string) int {
@@ -26,39 +28,31 @@ func reverseString(s string) string {
 	return string(runes)
 }
 
+var countCmd = &cobra.Command{
+	Use:   "count <text>",
+	Short: "Count the words and characters in a string",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		text := args[0]
+		fmt.Printf("Words: %d | Characters: %d\n", countWords(text), countCharacters(text))
+	},
+}
+var reverseCmd = &cobra.Command{
+	Use:   "reverse <text>",
+	Short: "Reverse a string",
+	Args:  cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(reverseString(args[0]))
+	},
+}
+var rootCmd = &cobra.Command{
+	Use:   "strutils",
+	Short: "A CLI tool for string utilities",
+}
+
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: go run main.go <count|reverse> <text>")
-		return
-	}
-
-	command := os.Args[1]
-
-	if command != "count" && command != "reverse" {
-		fmt.Println("Invalid command. Use 'count' or 'reverse'.")
-		return
-	}
-
-	if len(os.Args) < 3 {
-		fmt.Println("Please provide a string to process.")
-		return
-	}
-
-	if len(os.Args) > 3 {
-		fmt.Println("Please provide the text as one argument, using quotes if it contains spaces.")
-		return
-	}
-
-	text := os.Args[2]
-
-	switch command {
-	case "count":
-		fmt.Printf("Words: %d | Characters: %d\n",
-			countWords(text),
-			countCharacters(text),
-		)
-
-	case "reverse":
-		fmt.Println(reverseString(text))
+	rootCmd.AddCommand(countCmd, reverseCmd)
+	if err := rootCmd.Execute(); err != nil {
+		os.Exit(1)
 	}
 }
