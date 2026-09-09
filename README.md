@@ -32,6 +32,39 @@ Output:
 tfihSnepO
 ```
 
+### Replace
+
+Replaces all occurrences of a substring within a string with a new value.
+
+**Flags:**
+
+| Flag | Shorthand | Required | Description |
+|------|-----------|----------|-------------|
+| `--old` | `-o` | Yes | The substring to search for and replace |
+| `--new` | `-n` | No | The replacement string (defaults to empty string, effectively deleting matches) |
+
+```bash
+go run . replace "Hello world" --old "world" --new "Go"
+```
+
+Output:
+
+```text
+Hello Go
+```
+
+Omitting `--new` removes all occurrences of the old substring:
+
+```bash
+go run . replace "Hello world" --old " world"
+```
+
+Output:
+
+```text
+Hello
+```
+
 ## Help
 
 Use the built-in help command to view available commands:
@@ -45,6 +78,7 @@ For help with a specific command:
 ```bash
 go run . count --help
 go run . reverse --help
+go run . replace --help
 ```
 
 ## Build
@@ -60,4 +94,7 @@ Then run it directly:
 ```bash
 ./strutils count "Hello world"
 ./strutils reverse "OpenShift"
+./strutils replace "Hello world" --old "world" --new "Go"
 ```
+
+
